@@ -7489,18 +7489,35 @@ type LsTLVIPReachability struct {
 }
 
 func (l *LsTLVIPReachability) ToIPNet(ipv6 bool) net.IPNet {
-	b := make([]byte, 16)
+	var b []byte
+	if ipv6 {
+		if len(l.Prefix) < 16 {
+			fmt.Printf("Invalid IPv6 prefix length: %d\n", len(l.Prefix))
+			return net.IPNet{}
+		}
+		b = make([]byte, 16)
+	} else {
+		if len(l.Prefix) < 4 {
+			fmt.Printf("Invalid IPv4 prefix length: %d\n", len(l.Prefix))
+			return net.IPNet{}
+		}
+		b = make([]byte, 4)
+	}
+
 	for i := 0; i < int(((l.PrefixLength-1)/8)+1); i++ {
 		b[i] = l.Prefix[i]
 	}
 
-	ip := net.IPv4(b[0], b[1], b[2], b[3]).To4()
+	var ip net.IP
 	if ipv6 {
 		ip = net.IP(b).To16()
+	} else {
+		ip = net.IPv4(b[0], b[1], b[2], b[3]).To4()
 	}
 
 	_, n, err := net.ParseCIDR(fmt.Sprintf("%v/%v", ip, l.PrefixLength))
 	if err != nil {
+		fmt.Printf("Failed to parse CIDR: %v\n", err)
 		return net.IPNet{}
 	}
 
