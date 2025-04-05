@@ -5739,7 +5739,11 @@ func (l *LsPrefixV6NLRI) String() string {
 	prefix := &LsPrefixDescriptor{}
 	prefix.ParseTLVs(l.PrefixDesc, true)
 	ips := []string{}
+
 	for _, ip := range prefix.IPReachability {
+		if ip.IP == nil {
+			continue
+		}
 		ips = append(ips, ip.String())
 	}
 
