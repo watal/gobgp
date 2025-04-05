@@ -5975,10 +5975,24 @@ type LsSrv6SIDNLRI struct {
 }
 
 func (l *LsSrv6SIDNLRI) String() string {
-	strs := []string{
-		fmt.Sprintf("LOCAL_NODE: %v", l.LocalNodeDesc.(*LsTLVNodeDescriptor).Extract()),
-		fmt.Sprintf("SRv6_SID: %v", l.Srv6SIDInfo.(*LsTLVSrv6SIDInfo)),
-		fmt.Sprintf("MULTI_TOPO_IDs: %v", l.MultiTopoID.(*LsTLVMultiTopoID)),
+	strs := []string{}
+
+	if l.LocalNodeDesc != nil {
+		strs = append(strs, fmt.Sprintf("LOCAL_NODE: %v", l.LocalNodeDesc.(*LsTLVNodeDescriptor).Extract()))
+	} else {
+		strs = append(strs, "LOCAL_NODE: nil")
+	}
+
+	if l.Srv6SIDInfo != nil {
+		strs = append(strs, fmt.Sprintf("SRv6_SID: %v", l.Srv6SIDInfo.(*LsTLVSrv6SIDInfo)))
+	} else {
+		strs = append(strs, "SRv6_SID: nil")
+	}
+
+	if l.MultiTopoID != nil {
+		strs = append(strs, fmt.Sprintf("MULTI_TOPO_IDs: %v", l.MultiTopoID.(*LsTLVMultiTopoID)))
+	} else {
+		strs = append(strs, "MULTI_TOPO_IDs: nil")
 	}
 
 	if l.ServiceChaining != nil {
