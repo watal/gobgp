@@ -803,17 +803,21 @@ func MarshalLsSRv6SIDNLRI(n *bgp.LsSrv6SIDNLRI) (*apb.Any, error) {
 	if err != nil {
 		return nil, err
 	}
-	sc, ok := n.ServiceChaining.(*bgp.LsTLVServiceChaining)
-	if !ok {
-		return nil, fmt.Errorf("invalid service chaining type")
+
+	var serviceChaining *api.LsServiceChaining
+	if sc, ok := n.ServiceChaining.(*bgp.LsTLVServiceChaining); ok && sc != nil {
+		serviceChaining, err = MarshalLsTLVServiceChaining(sc)
+		if err != nil {
+			return nil, err
+		}
 	}
-	serviceChaining, err := MarshalLsTLVServiceChaining(sc)
-	if err != nil {
-		return nil, err
-	}
-	opaqueMetadata, err := MarshalLsTLVOpaqueMetadata(n.OpaqueMetadata.(*bgp.LsTLVOpaqueMetadata))
-	if err != nil {
-		return nil, err
+
+	var opaqueMetadata *api.LsOpaqueMetadata
+	if om, ok := n.OpaqueMetadata.(*bgp.LsTLVOpaqueMetadata); ok && om != nil {
+		opaqueMetadata, err = MarshalLsTLVOpaqueMetadata(om)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	srv6sid := &api.LsSrv6SIDNLRI{
@@ -904,7 +908,11 @@ func UnmarshalLsLinkDescriptor(ld *api.LsLinkDescriptor) (*bgp.LsLinkDescriptor,
 func UnmarshalPrefixDescriptor(pd *api.LsPrefixDescriptor) (*bgp.LsPrefixDescriptor, error) {
 	ipReachability := []net.IPNet{}
 	for _, reach := range pd.IpReachability {
-		_, ipnet, _ := net.ParseCIDR(reach)
+		_, ipnet, err := net.ParseCIDR(reach)
+		if err != nil {
+			// Skipping invalid prefix
+			continue
+		}
 		ipReachability = append(ipReachability, *ipnet)
 	}
 
@@ -1891,14 +1899,20 @@ func UnmarshalNLRI(rf bgp.RouteFamily, an *apb.Any) (bgp.AddrPrefixInterface, er
 				return nil, err
 			}
 
-			scTLV, err := UnmarshalLsTLVServiceChaining(tp.ServiceChaining)
-			if err != nil {
-				return nil, err
+			var scTLV *bgp.LsTLVServiceChaining
+			if tp.ServiceChaining != nil {
+				scTLV, err = UnmarshalLsTLVServiceChaining(tp.ServiceChaining)
+				if err != nil {
+					return nil, err
+				}
 			}
 
-			omTLV, err := UnmarshalLsTLVOpaqueMetadata(tp.OpaqueMetadata)
-			if err != nil {
-				return nil, err
+			var omTLV *bgp.LsTLVOpaqueMetadata
+			if tp.OpaqueMetadata != nil {
+				omTLV, err = UnmarshalLsTLVOpaqueMetadata(tp.OpaqueMetadata)
+				if err != nil {
+					return nil, err
+				}
 			}
 
 			nlri = &bgp.LsAddrPrefix{
