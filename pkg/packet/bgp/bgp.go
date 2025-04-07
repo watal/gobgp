@@ -6095,19 +6095,23 @@ func (l *LsSrv6SIDNLRI) Serialize() ([]byte, error) {
 	}
 
 	if l.ServiceChaining != nil {
-		s, err = l.ServiceChaining.Serialize()
-		if err != nil {
-			return nil, err
+		if sc, ok := l.ServiceChaining.(*LsTLVServiceChaining); ok && sc != nil {
+			s, err = sc.Serialize()
+			if err != nil {
+				return nil, err
+			}
+			buf = append(buf, s...)
 		}
-		buf = append(buf, s...)
 	}
 
 	if l.OpaqueMetadata != nil {
-		s, err = l.OpaqueMetadata.Serialize()
-		if err != nil {
-			return nil, err
+		if om, ok := l.OpaqueMetadata.(*LsTLVOpaqueMetadata); ok && om != nil {
+			s, err = om.Serialize()
+			if err != nil {
+				return nil, err
+			}
+			buf = append(buf, s...)
 		}
-		buf = append(buf, s...)
 	}
 
 	return l.LsNLRI.Serialize(buf)
