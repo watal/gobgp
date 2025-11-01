@@ -2537,6 +2537,8 @@ type LsSrv6SIDNLRI struct {
 	LocalNode          *LsNodeDescriptor          `protobuf:"bytes,1,opt,name=local_node,json=localNode,proto3" json:"local_node,omitempty"`
 	Srv6SidInformation *LsSrv6SIDInformation      `protobuf:"bytes,2,opt,name=srv6_sid_information,json=srv6SidInformation,proto3" json:"srv6_sid_information,omitempty"`
 	MultiTopoId        *LsMultiTopologyIdentifier `protobuf:"bytes,3,opt,name=multi_topo_id,json=multiTopoId,proto3" json:"multi_topo_id,omitempty"`
+	ServiceChaining    *LsServiceChaining         `protobuf:"bytes,4,opt,name=service_chaining,json=serviceChaining,proto3" json:"service_chaining,omitempty"`
+	OpaqueMetadata     *LsOpaqueMetadata          `protobuf:"bytes,5,opt,name=opaque_metadata,json=opaqueMetadata,proto3" json:"opaque_metadata,omitempty"`
 	unknownFields      protoimpl.UnknownFields
 	sizeCache          protoimpl.SizeCache
 }
@@ -2592,6 +2594,150 @@ func (x *LsSrv6SIDNLRI) GetMultiTopoId() *LsMultiTopologyIdentifier {
 	return nil
 }
 
+func (x *LsSrv6SIDNLRI) GetServiceChaining() *LsServiceChaining {
+	if x != nil {
+		return x.ServiceChaining
+	}
+	return nil
+}
+
+func (x *LsSrv6SIDNLRI) GetOpaqueMetadata() *LsOpaqueMetadata {
+	if x != nil {
+		return x.OpaqueMetadata
+	}
+	return nil
+}
+
+// https://tools.ietf.org/html/draft-ietf-idr-bgp-ls-service-segments#section-2
+type LsServiceChaining struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Servicetype   uint32                 `protobuf:"varint,1,opt,name=servicetype,proto3" json:"servicetype,omitempty"`
+	Flags         uint32                 `protobuf:"varint,2,opt,name=flags,proto3" json:"flags,omitempty"`
+	Traffictype   uint32                 `protobuf:"varint,3,opt,name=traffictype,proto3" json:"traffictype,omitempty"`
+	Reserved      uint32                 `protobuf:"varint,4,opt,name=reserved,proto3" json:"reserved,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *LsServiceChaining) Reset() {
+	*x = LsServiceChaining{}
+	mi := &file_api_nlri_proto_msgTypes[33]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *LsServiceChaining) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*LsServiceChaining) ProtoMessage() {}
+
+func (x *LsServiceChaining) ProtoReflect() protoreflect.Message {
+	mi := &file_api_nlri_proto_msgTypes[33]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use LsServiceChaining.ProtoReflect.Descriptor instead.
+func (*LsServiceChaining) Descriptor() ([]byte, []int) {
+	return file_api_nlri_proto_rawDescGZIP(), []int{33}
+}
+
+func (x *LsServiceChaining) GetServicetype() uint32 {
+	if x != nil {
+		return x.Servicetype
+	}
+	return 0
+}
+
+func (x *LsServiceChaining) GetFlags() uint32 {
+	if x != nil {
+		return x.Flags
+	}
+	return 0
+}
+
+func (x *LsServiceChaining) GetTraffictype() uint32 {
+	if x != nil {
+		return x.Traffictype
+	}
+	return 0
+}
+
+func (x *LsServiceChaining) GetReserved() uint32 {
+	if x != nil {
+		return x.Reserved
+	}
+	return 0
+}
+
+// https://tools.ietf.org/html/draft-ietf-idr-bgp-ls-service-segments#section-2
+type LsOpaqueMetadata struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Opaquetype    uint32                 `protobuf:"varint,1,opt,name=opaquetype,proto3" json:"opaquetype,omitempty"`
+	Flags         uint32                 `protobuf:"varint,2,opt,name=flags,proto3" json:"flags,omitempty"`
+	Value         []byte                 `protobuf:"bytes,3,opt,name=value,proto3" json:"value,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *LsOpaqueMetadata) Reset() {
+	*x = LsOpaqueMetadata{}
+	mi := &file_api_nlri_proto_msgTypes[34]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *LsOpaqueMetadata) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*LsOpaqueMetadata) ProtoMessage() {}
+
+func (x *LsOpaqueMetadata) ProtoReflect() protoreflect.Message {
+	mi := &file_api_nlri_proto_msgTypes[34]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use LsOpaqueMetadata.ProtoReflect.Descriptor instead.
+func (*LsOpaqueMetadata) Descriptor() ([]byte, []int) {
+	return file_api_nlri_proto_rawDescGZIP(), []int{34}
+}
+
+func (x *LsOpaqueMetadata) GetOpaquetype() uint32 {
+	if x != nil {
+		return x.Opaquetype
+	}
+	return 0
+}
+
+func (x *LsOpaqueMetadata) GetFlags() uint32 {
+	if x != nil {
+		return x.Flags
+	}
+	return 0
+}
+
+func (x *LsOpaqueMetadata) GetValue() []byte {
+	if x != nil {
+		return x.Value
+	}
+	return nil
+}
+
 // LsAddrPrefix represents the NLRI for:
 // - AFI=16388, SAFI=71
 type LsAddrPrefix struct {
@@ -2607,7 +2753,7 @@ type LsAddrPrefix struct {
 
 func (x *LsAddrPrefix) Reset() {
 	*x = LsAddrPrefix{}
-	mi := &file_api_nlri_proto_msgTypes[33]
+	mi := &file_api_nlri_proto_msgTypes[35]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2619,7 +2765,7 @@ func (x *LsAddrPrefix) String() string {
 func (*LsAddrPrefix) ProtoMessage() {}
 
 func (x *LsAddrPrefix) ProtoReflect() protoreflect.Message {
-	mi := &file_api_nlri_proto_msgTypes[33]
+	mi := &file_api_nlri_proto_msgTypes[35]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2632,7 +2778,7 @@ func (x *LsAddrPrefix) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LsAddrPrefix.ProtoReflect.Descriptor instead.
 func (*LsAddrPrefix) Descriptor() ([]byte, []int) {
-	return file_api_nlri_proto_rawDescGZIP(), []int{33}
+	return file_api_nlri_proto_rawDescGZIP(), []int{35}
 }
 
 func (x *LsAddrPrefix) GetType() LsNLRIType {
@@ -2680,7 +2826,7 @@ type MUPInterworkSegmentDiscoveryRoute struct {
 
 func (x *MUPInterworkSegmentDiscoveryRoute) Reset() {
 	*x = MUPInterworkSegmentDiscoveryRoute{}
-	mi := &file_api_nlri_proto_msgTypes[34]
+	mi := &file_api_nlri_proto_msgTypes[36]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2692,7 +2838,7 @@ func (x *MUPInterworkSegmentDiscoveryRoute) String() string {
 func (*MUPInterworkSegmentDiscoveryRoute) ProtoMessage() {}
 
 func (x *MUPInterworkSegmentDiscoveryRoute) ProtoReflect() protoreflect.Message {
-	mi := &file_api_nlri_proto_msgTypes[34]
+	mi := &file_api_nlri_proto_msgTypes[36]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2705,7 +2851,7 @@ func (x *MUPInterworkSegmentDiscoveryRoute) ProtoReflect() protoreflect.Message 
 
 // Deprecated: Use MUPInterworkSegmentDiscoveryRoute.ProtoReflect.Descriptor instead.
 func (*MUPInterworkSegmentDiscoveryRoute) Descriptor() ([]byte, []int) {
-	return file_api_nlri_proto_rawDescGZIP(), []int{34}
+	return file_api_nlri_proto_rawDescGZIP(), []int{36}
 }
 
 func (x *MUPInterworkSegmentDiscoveryRoute) GetRd() *RouteDistinguisher {
@@ -2732,7 +2878,7 @@ type MUPDirectSegmentDiscoveryRoute struct {
 
 func (x *MUPDirectSegmentDiscoveryRoute) Reset() {
 	*x = MUPDirectSegmentDiscoveryRoute{}
-	mi := &file_api_nlri_proto_msgTypes[35]
+	mi := &file_api_nlri_proto_msgTypes[37]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2744,7 +2890,7 @@ func (x *MUPDirectSegmentDiscoveryRoute) String() string {
 func (*MUPDirectSegmentDiscoveryRoute) ProtoMessage() {}
 
 func (x *MUPDirectSegmentDiscoveryRoute) ProtoReflect() protoreflect.Message {
-	mi := &file_api_nlri_proto_msgTypes[35]
+	mi := &file_api_nlri_proto_msgTypes[37]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2757,7 +2903,7 @@ func (x *MUPDirectSegmentDiscoveryRoute) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MUPDirectSegmentDiscoveryRoute.ProtoReflect.Descriptor instead.
 func (*MUPDirectSegmentDiscoveryRoute) Descriptor() ([]byte, []int) {
-	return file_api_nlri_proto_rawDescGZIP(), []int{35}
+	return file_api_nlri_proto_rawDescGZIP(), []int{37}
 }
 
 func (x *MUPDirectSegmentDiscoveryRoute) GetRd() *RouteDistinguisher {
@@ -2792,7 +2938,7 @@ type MUPType1SessionTransformedRoute struct {
 
 func (x *MUPType1SessionTransformedRoute) Reset() {
 	*x = MUPType1SessionTransformedRoute{}
-	mi := &file_api_nlri_proto_msgTypes[36]
+	mi := &file_api_nlri_proto_msgTypes[38]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2804,7 +2950,7 @@ func (x *MUPType1SessionTransformedRoute) String() string {
 func (*MUPType1SessionTransformedRoute) ProtoMessage() {}
 
 func (x *MUPType1SessionTransformedRoute) ProtoReflect() protoreflect.Message {
-	mi := &file_api_nlri_proto_msgTypes[36]
+	mi := &file_api_nlri_proto_msgTypes[38]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2817,7 +2963,7 @@ func (x *MUPType1SessionTransformedRoute) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MUPType1SessionTransformedRoute.ProtoReflect.Descriptor instead.
 func (*MUPType1SessionTransformedRoute) Descriptor() ([]byte, []int) {
-	return file_api_nlri_proto_rawDescGZIP(), []int{36}
+	return file_api_nlri_proto_rawDescGZIP(), []int{38}
 }
 
 func (x *MUPType1SessionTransformedRoute) GetRd() *RouteDistinguisher {
@@ -2896,7 +3042,7 @@ type MUPType2SessionTransformedRoute struct {
 
 func (x *MUPType2SessionTransformedRoute) Reset() {
 	*x = MUPType2SessionTransformedRoute{}
-	mi := &file_api_nlri_proto_msgTypes[37]
+	mi := &file_api_nlri_proto_msgTypes[39]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2908,7 +3054,7 @@ func (x *MUPType2SessionTransformedRoute) String() string {
 func (*MUPType2SessionTransformedRoute) ProtoMessage() {}
 
 func (x *MUPType2SessionTransformedRoute) ProtoReflect() protoreflect.Message {
-	mi := &file_api_nlri_proto_msgTypes[37]
+	mi := &file_api_nlri_proto_msgTypes[39]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2921,7 +3067,7 @@ func (x *MUPType2SessionTransformedRoute) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MUPType2SessionTransformedRoute.ProtoReflect.Descriptor instead.
 func (*MUPType2SessionTransformedRoute) Descriptor() ([]byte, []int) {
-	return file_api_nlri_proto_rawDescGZIP(), []int{37}
+	return file_api_nlri_proto_rawDescGZIP(), []int{39}
 }
 
 func (x *MUPType2SessionTransformedRoute) GetRd() *RouteDistinguisher {
@@ -2968,7 +3114,7 @@ type LsAddrPrefix_LsNLRI struct {
 
 func (x *LsAddrPrefix_LsNLRI) Reset() {
 	*x = LsAddrPrefix_LsNLRI{}
-	mi := &file_api_nlri_proto_msgTypes[38]
+	mi := &file_api_nlri_proto_msgTypes[40]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2980,7 +3126,7 @@ func (x *LsAddrPrefix_LsNLRI) String() string {
 func (*LsAddrPrefix_LsNLRI) ProtoMessage() {}
 
 func (x *LsAddrPrefix_LsNLRI) ProtoReflect() protoreflect.Message {
-	mi := &file_api_nlri_proto_msgTypes[38]
+	mi := &file_api_nlri_proto_msgTypes[40]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2993,7 +3139,7 @@ func (x *LsAddrPrefix_LsNLRI) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LsAddrPrefix_LsNLRI.ProtoReflect.Descriptor instead.
 func (*LsAddrPrefix_LsNLRI) Descriptor() ([]byte, []int) {
-	return file_api_nlri_proto_rawDescGZIP(), []int{33, 0}
+	return file_api_nlri_proto_rawDescGZIP(), []int{35, 0}
 }
 
 func (x *LsAddrPrefix_LsNLRI) GetNlri() isLsAddrPrefix_LsNLRI_Nlri {
@@ -3255,12 +3401,25 @@ const file_api_nlri_proto_rawDesc = "" +
 	"\x14LsSrv6SIDInformation\x12\x12\n" +
 	"\x04sids\x18\x01 \x03(\tR\x04sids\"A\n" +
 	"\x19LsMultiTopologyIdentifier\x12$\n" +
-	"\x0emulti_topo_ids\x18\x01 \x03(\rR\fmultiTopoIds\"\xd6\x01\n" +
+	"\x0emulti_topo_ids\x18\x01 \x03(\rR\fmultiTopoIds\"\xd9\x02\n" +
 	"\rLsSrv6SIDNLRI\x124\n" +
 	"\n" +
 	"local_node\x18\x01 \x01(\v2\x15.api.LsNodeDescriptorR\tlocalNode\x12K\n" +
 	"\x14srv6_sid_information\x18\x02 \x01(\v2\x19.api.LsSrv6SIDInformationR\x12srv6SidInformation\x12B\n" +
-	"\rmulti_topo_id\x18\x03 \x01(\v2\x1e.api.LsMultiTopologyIdentifierR\vmultiTopoId\"\xc7\x03\n" +
+	"\rmulti_topo_id\x18\x03 \x01(\v2\x1e.api.LsMultiTopologyIdentifierR\vmultiTopoId\x12A\n" +
+	"\x10service_chaining\x18\x04 \x01(\v2\x16.api.LsServiceChainingR\x0fserviceChaining\x12>\n" +
+	"\x0fopaque_metadata\x18\x05 \x01(\v2\x15.api.LsOpaqueMetadataR\x0eopaqueMetadata\"\x89\x01\n" +
+	"\x11LsServiceChaining\x12 \n" +
+	"\vservicetype\x18\x01 \x01(\rR\vservicetype\x12\x14\n" +
+	"\x05flags\x18\x02 \x01(\rR\x05flags\x12 \n" +
+	"\vtraffictype\x18\x03 \x01(\rR\vtraffictype\x12\x1a\n" +
+	"\breserved\x18\x04 \x01(\rR\breserved\"^\n" +
+	"\x10LsOpaqueMetadata\x12\x1e\n" +
+	"\n" +
+	"opaquetype\x18\x01 \x01(\rR\n" +
+	"opaquetype\x12\x14\n" +
+	"\x05flags\x18\x02 \x01(\rR\x05flags\x12\x14\n" +
+	"\x05value\x18\x03 \x01(\fR\x05value\"\xc7\x03\n" +
 	"\fLsAddrPrefix\x12#\n" +
 	"\x04type\x18\x01 \x01(\x0e2\x0f.api.LsNLRITypeR\x04type\x12,\n" +
 	"\x04nlri\x18\x02 \x01(\v2\x18.api.LsAddrPrefix.LsNLRIR\x04nlri\x12\x16\n" +
@@ -3336,7 +3495,7 @@ func file_api_nlri_proto_rawDescGZIP() []byte {
 }
 
 var file_api_nlri_proto_enumTypes = make([]protoimpl.EnumInfo, 3)
-var file_api_nlri_proto_msgTypes = make([]protoimpl.MessageInfo, 39)
+var file_api_nlri_proto_msgTypes = make([]protoimpl.MessageInfo, 41)
 var file_api_nlri_proto_goTypes = []any{
 	(LsNLRIType)(0),                                // 0: api.LsNLRIType
 	(LsProtocolID)(0),                              // 1: api.LsProtocolID
@@ -3374,14 +3533,16 @@ var file_api_nlri_proto_goTypes = []any{
 	(*LsSrv6SIDInformation)(nil),                   // 33: api.LsSrv6SIDInformation
 	(*LsMultiTopologyIdentifier)(nil),              // 34: api.LsMultiTopologyIdentifier
 	(*LsSrv6SIDNLRI)(nil),                          // 35: api.LsSrv6SIDNLRI
-	(*LsAddrPrefix)(nil),                           // 36: api.LsAddrPrefix
-	(*MUPInterworkSegmentDiscoveryRoute)(nil),      // 37: api.MUPInterworkSegmentDiscoveryRoute
-	(*MUPDirectSegmentDiscoveryRoute)(nil),         // 38: api.MUPDirectSegmentDiscoveryRoute
-	(*MUPType1SessionTransformedRoute)(nil),        // 39: api.MUPType1SessionTransformedRoute
-	(*MUPType2SessionTransformedRoute)(nil),        // 40: api.MUPType2SessionTransformedRoute
-	(*LsAddrPrefix_LsNLRI)(nil),                    // 41: api.LsAddrPrefix.LsNLRI
-	(*RouteDistinguisher)(nil),                     // 42: api.RouteDistinguisher
-	(*RouteTarget)(nil),                            // 43: api.RouteTarget
+	(*LsServiceChaining)(nil),                      // 36: api.LsServiceChaining
+	(*LsOpaqueMetadata)(nil),                       // 37: api.LsOpaqueMetadata
+	(*LsAddrPrefix)(nil),                           // 38: api.LsAddrPrefix
+	(*MUPInterworkSegmentDiscoveryRoute)(nil),      // 39: api.MUPInterworkSegmentDiscoveryRoute
+	(*MUPDirectSegmentDiscoveryRoute)(nil),         // 40: api.MUPDirectSegmentDiscoveryRoute
+	(*MUPType1SessionTransformedRoute)(nil),        // 41: api.MUPType1SessionTransformedRoute
+	(*MUPType2SessionTransformedRoute)(nil),        // 42: api.MUPType2SessionTransformedRoute
+	(*LsAddrPrefix_LsNLRI)(nil),                    // 43: api.LsAddrPrefix.LsNLRI
+	(*RouteDistinguisher)(nil),                     // 44: api.RouteDistinguisher
+	(*RouteTarget)(nil),                            // 45: api.RouteTarget
 }
 var file_api_nlri_proto_depIdxs = []int32{
 	4,  // 0: api.NLRI.prefix:type_name -> api.IPAddressPrefix
@@ -3399,32 +3560,32 @@ var file_api_nlri_proto_depIdxs = []int32{
 	23, // 12: api.NLRI.flow_spec:type_name -> api.FlowSpecNLRI
 	24, // 13: api.NLRI.vpn_flow_spec:type_name -> api.VPNFlowSpecNLRI
 	25, // 14: api.NLRI.opaque:type_name -> api.OpaqueNLRI
-	36, // 15: api.NLRI.ls_addr_prefix:type_name -> api.LsAddrPrefix
+	38, // 15: api.NLRI.ls_addr_prefix:type_name -> api.LsAddrPrefix
 	15, // 16: api.NLRI.sr_policy:type_name -> api.SRPolicyNLRI
-	37, // 17: api.NLRI.mup_interwork_segment_discovery:type_name -> api.MUPInterworkSegmentDiscoveryRoute
-	38, // 18: api.NLRI.mup_direct_segment_discovery:type_name -> api.MUPDirectSegmentDiscoveryRoute
-	39, // 19: api.NLRI.mup_type_1_session_transformed:type_name -> api.MUPType1SessionTransformedRoute
-	40, // 20: api.NLRI.mup_type_2_session_transformed:type_name -> api.MUPType2SessionTransformedRoute
-	42, // 21: api.VPLSNLRI.rd:type_name -> api.RouteDistinguisher
-	42, // 22: api.EVPNEthernetAutoDiscoveryRoute.rd:type_name -> api.RouteDistinguisher
+	39, // 17: api.NLRI.mup_interwork_segment_discovery:type_name -> api.MUPInterworkSegmentDiscoveryRoute
+	40, // 18: api.NLRI.mup_direct_segment_discovery:type_name -> api.MUPDirectSegmentDiscoveryRoute
+	41, // 19: api.NLRI.mup_type_1_session_transformed:type_name -> api.MUPType1SessionTransformedRoute
+	42, // 20: api.NLRI.mup_type_2_session_transformed:type_name -> api.MUPType2SessionTransformedRoute
+	44, // 21: api.VPLSNLRI.rd:type_name -> api.RouteDistinguisher
+	44, // 22: api.EVPNEthernetAutoDiscoveryRoute.rd:type_name -> api.RouteDistinguisher
 	8,  // 23: api.EVPNEthernetAutoDiscoveryRoute.esi:type_name -> api.EthernetSegmentIdentifier
-	42, // 24: api.EVPNMACIPAdvertisementRoute.rd:type_name -> api.RouteDistinguisher
+	44, // 24: api.EVPNMACIPAdvertisementRoute.rd:type_name -> api.RouteDistinguisher
 	8,  // 25: api.EVPNMACIPAdvertisementRoute.esi:type_name -> api.EthernetSegmentIdentifier
-	42, // 26: api.EVPNInclusiveMulticastEthernetTagRoute.rd:type_name -> api.RouteDistinguisher
-	42, // 27: api.EVPNEthernetSegmentRoute.rd:type_name -> api.RouteDistinguisher
+	44, // 26: api.EVPNInclusiveMulticastEthernetTagRoute.rd:type_name -> api.RouteDistinguisher
+	44, // 27: api.EVPNEthernetSegmentRoute.rd:type_name -> api.RouteDistinguisher
 	8,  // 28: api.EVPNEthernetSegmentRoute.esi:type_name -> api.EthernetSegmentIdentifier
-	42, // 29: api.EVPNIPPrefixRoute.rd:type_name -> api.RouteDistinguisher
+	44, // 29: api.EVPNIPPrefixRoute.rd:type_name -> api.RouteDistinguisher
 	8,  // 30: api.EVPNIPPrefixRoute.esi:type_name -> api.EthernetSegmentIdentifier
-	42, // 31: api.EVPNIPMSIRoute.rd:type_name -> api.RouteDistinguisher
-	43, // 32: api.EVPNIPMSIRoute.rt:type_name -> api.RouteTarget
-	42, // 33: api.LabeledVPNIPAddressPrefix.rd:type_name -> api.RouteDistinguisher
-	43, // 34: api.RouteTargetMembershipNLRI.rt:type_name -> api.RouteTarget
+	44, // 31: api.EVPNIPMSIRoute.rd:type_name -> api.RouteDistinguisher
+	45, // 32: api.EVPNIPMSIRoute.rt:type_name -> api.RouteTarget
+	44, // 33: api.LabeledVPNIPAddressPrefix.rd:type_name -> api.RouteDistinguisher
+	45, // 34: api.RouteTargetMembershipNLRI.rt:type_name -> api.RouteTarget
 	20, // 35: api.FlowSpecComponent.items:type_name -> api.FlowSpecComponentItem
 	18, // 36: api.FlowSpecRule.ip_prefix:type_name -> api.FlowSpecIPPrefix
 	19, // 37: api.FlowSpecRule.mac:type_name -> api.FlowSpecMAC
 	21, // 38: api.FlowSpecRule.component:type_name -> api.FlowSpecComponent
 	22, // 39: api.FlowSpecNLRI.rules:type_name -> api.FlowSpecRule
-	42, // 40: api.VPNFlowSpecNLRI.rd:type_name -> api.RouteDistinguisher
+	44, // 40: api.VPNFlowSpecNLRI.rd:type_name -> api.RouteDistinguisher
 	22, // 41: api.VPNFlowSpecNLRI.rules:type_name -> api.FlowSpecRule
 	2,  // 42: api.LsPrefixDescriptor.ospf_route_type:type_name -> api.LsOspfRouteType
 	26, // 43: api.LsNodeNLRI.local_node:type_name -> api.LsNodeDescriptor
@@ -3438,23 +3599,25 @@ var file_api_nlri_proto_depIdxs = []int32{
 	26, // 51: api.LsSrv6SIDNLRI.local_node:type_name -> api.LsNodeDescriptor
 	33, // 52: api.LsSrv6SIDNLRI.srv6_sid_information:type_name -> api.LsSrv6SIDInformation
 	34, // 53: api.LsSrv6SIDNLRI.multi_topo_id:type_name -> api.LsMultiTopologyIdentifier
-	0,  // 54: api.LsAddrPrefix.type:type_name -> api.LsNLRIType
-	41, // 55: api.LsAddrPrefix.nlri:type_name -> api.LsAddrPrefix.LsNLRI
-	1,  // 56: api.LsAddrPrefix.protocol_id:type_name -> api.LsProtocolID
-	42, // 57: api.MUPInterworkSegmentDiscoveryRoute.rd:type_name -> api.RouteDistinguisher
-	42, // 58: api.MUPDirectSegmentDiscoveryRoute.rd:type_name -> api.RouteDistinguisher
-	42, // 59: api.MUPType1SessionTransformedRoute.rd:type_name -> api.RouteDistinguisher
-	42, // 60: api.MUPType2SessionTransformedRoute.rd:type_name -> api.RouteDistinguisher
-	29, // 61: api.LsAddrPrefix.LsNLRI.node:type_name -> api.LsNodeNLRI
-	30, // 62: api.LsAddrPrefix.LsNLRI.link:type_name -> api.LsLinkNLRI
-	31, // 63: api.LsAddrPrefix.LsNLRI.prefix_v4:type_name -> api.LsPrefixV4NLRI
-	32, // 64: api.LsAddrPrefix.LsNLRI.prefix_v6:type_name -> api.LsPrefixV6NLRI
-	35, // 65: api.LsAddrPrefix.LsNLRI.srv6_sid:type_name -> api.LsSrv6SIDNLRI
-	66, // [66:66] is the sub-list for method output_type
-	66, // [66:66] is the sub-list for method input_type
-	66, // [66:66] is the sub-list for extension type_name
-	66, // [66:66] is the sub-list for extension extendee
-	0,  // [0:66] is the sub-list for field type_name
+	36, // 54: api.LsSrv6SIDNLRI.service_chaining:type_name -> api.LsServiceChaining
+	37, // 55: api.LsSrv6SIDNLRI.opaque_metadata:type_name -> api.LsOpaqueMetadata
+	0,  // 56: api.LsAddrPrefix.type:type_name -> api.LsNLRIType
+	43, // 57: api.LsAddrPrefix.nlri:type_name -> api.LsAddrPrefix.LsNLRI
+	1,  // 58: api.LsAddrPrefix.protocol_id:type_name -> api.LsProtocolID
+	44, // 59: api.MUPInterworkSegmentDiscoveryRoute.rd:type_name -> api.RouteDistinguisher
+	44, // 60: api.MUPDirectSegmentDiscoveryRoute.rd:type_name -> api.RouteDistinguisher
+	44, // 61: api.MUPType1SessionTransformedRoute.rd:type_name -> api.RouteDistinguisher
+	44, // 62: api.MUPType2SessionTransformedRoute.rd:type_name -> api.RouteDistinguisher
+	29, // 63: api.LsAddrPrefix.LsNLRI.node:type_name -> api.LsNodeNLRI
+	30, // 64: api.LsAddrPrefix.LsNLRI.link:type_name -> api.LsLinkNLRI
+	31, // 65: api.LsAddrPrefix.LsNLRI.prefix_v4:type_name -> api.LsPrefixV4NLRI
+	32, // 66: api.LsAddrPrefix.LsNLRI.prefix_v6:type_name -> api.LsPrefixV6NLRI
+	35, // 67: api.LsAddrPrefix.LsNLRI.srv6_sid:type_name -> api.LsSrv6SIDNLRI
+	68, // [68:68] is the sub-list for method output_type
+	68, // [68:68] is the sub-list for method input_type
+	68, // [68:68] is the sub-list for extension type_name
+	68, // [68:68] is the sub-list for extension extendee
+	0,  // [0:68] is the sub-list for field type_name
 }
 
 func init() { file_api_nlri_proto_init() }
@@ -3492,7 +3655,7 @@ func file_api_nlri_proto_init() {
 		(*FlowSpecRule_Mac)(nil),
 		(*FlowSpecRule_Component)(nil),
 	}
-	file_api_nlri_proto_msgTypes[38].OneofWrappers = []any{
+	file_api_nlri_proto_msgTypes[40].OneofWrappers = []any{
 		(*LsAddrPrefix_LsNLRI_Node)(nil),
 		(*LsAddrPrefix_LsNLRI_Link)(nil),
 		(*LsAddrPrefix_LsNLRI_PrefixV4)(nil),
@@ -3505,7 +3668,7 @@ func file_api_nlri_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_api_nlri_proto_rawDesc), len(file_api_nlri_proto_rawDesc)),
 			NumEnums:      3,
-			NumMessages:   39,
+			NumMessages:   41,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

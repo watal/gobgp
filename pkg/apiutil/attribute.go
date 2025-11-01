@@ -804,6 +804,7 @@ func MarshalLsSRv6SIDNLRI(n *bgp.LsSrv6SIDNLRI) (*api.LsAddrPrefix_LsNLRI, error
 	if err != nil {
 		return nil, err
 	}
+
 	srv6Info, ok := n.Srv6SIDInfo.(*bgp.LsTLVSrv6SIDInfo)
 	if !ok {
 		return nil, fmt.Errorf("invalid SRv6 SID info type")
@@ -812,13 +813,42 @@ func MarshalLsSRv6SIDNLRI(n *bgp.LsSrv6SIDNLRI) (*api.LsAddrPrefix_LsNLRI, error
 	if err != nil {
 		return nil, err
 	}
+
 	var multiTopoID *bgp.LsTLVMultiTopoID
 	if n.MultiTopoID != nil {
-		multiTopoID = n.MultiTopoID.(*bgp.LsTLVMultiTopoID)
+		var ok bool
+		multiTopoID, ok = n.MultiTopoID.(*bgp.LsTLVMultiTopoID)
+		if !ok {
+			return nil, fmt.Errorf("invalid MultiTopoID type")
+		}
 	}
 	mti, err := MarshalLsTLVMultiTopoID(multiTopoID)
 	if err != nil {
 		return nil, err
+	}
+
+	var sc *api.LsServiceChaining
+	if n.ServiceChaining != nil {
+		serviceChainingTLV := n.ServiceChaining.(*bgp.LsTLVServiceChaining)
+		if !ok {
+			return nil, fmt.Errorf("invalid ServiceChaining type")
+		}
+		sc, err = MarshalLsTLVServiceChaining(serviceChainingTLV)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	var om *api.LsOpaqueMetadata
+	if n.OpaqueMetadata != nil {
+		opaqueMetadataTLV := n.OpaqueMetadata.(*bgp.LsTLVOpaqueMetadata)
+		if !ok {
+			return nil, fmt.Errorf("invalid OpaqueMetadata type")
+		}
+		om, err = MarshalLsTLVOpaqueMetadata(opaqueMetadataTLV)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	srv6sid := &api.LsAddrPrefix_LsNLRI{Nlri: &api.LsAddrPrefix_LsNLRI_Srv6Sid{
@@ -826,6 +856,8 @@ func MarshalLsSRv6SIDNLRI(n *bgp.LsSrv6SIDNLRI) (*api.LsAddrPrefix_LsNLRI, error
 			LocalNode:          ln,
 			Srv6SidInformation: ssi,
 			MultiTopoId:        mti,
+			ServiceChaining:    sc,
+			OpaqueMetadata:     om,
 		},
 	}}
 
@@ -994,6 +1026,48 @@ func MarshalLsTLVMultiTopoID(mti *bgp.LsTLVMultiTopoID) (*api.LsMultiTopologyIde
 	}
 	return &api.LsMultiTopologyIdentifier{
 		MultiTopoIds: multiTopoIds,
+	}, nil
+}
+
+func UnmarshalLsTLVServiceChaining(sc *api.LsServiceChaining) (*bgp.LsTLVServiceChaining, error) {
+	return &bgp.LsTLVServiceChaining{
+		LsTLV: bgp.LsTLV{
+			Type:   bgp.LS_TLV_SERVICE_CHAINING,
+			Length: 6,
+		},
+		ServiceType: uint16(sc.Servicetype),
+		Flags:       uint8(sc.Flags),
+		TrafficType: uint8(sc.Traffictype),
+	}, nil
+}
+
+func MarshalLsTLVServiceChaining(sc *bgp.LsTLVServiceChaining) (*api.LsServiceChaining, error) {
+	return &api.LsServiceChaining{
+		Servicetype: uint32(sc.ServiceType),
+		Flags:       uint32(sc.Flags),
+		Traffictype: uint32(sc.TrafficType),
+	}, nil
+}
+
+func UnmarshalLsTLVOpaqueMetadata(om *api.LsOpaqueMetadata) (*bgp.LsTLVOpaqueMetadata, error) {
+	const OPAQUETYPE_FLAGS_LEN = 3 // OpaqueType(2) + Flags(1)
+	omLen := OPAQUETYPE_FLAGS_LEN + len(om.Value)
+	return &bgp.LsTLVOpaqueMetadata{
+		LsTLV: bgp.LsTLV{
+			Type:   bgp.LS_TLV_OPAQUE_METADATA,
+			Length: uint16(omLen),
+		},
+		OpaqueType: uint16(om.Opaquetype),
+		Flags:      uint8(om.Flags),
+		Value:      om.Value,
+	}, nil
+}
+
+func MarshalLsTLVOpaqueMetadata(om *bgp.LsTLVOpaqueMetadata) (*api.LsOpaqueMetadata, error) {
+	return &api.LsOpaqueMetadata{
+		Opaquetype: uint32(om.OpaqueType),
+		Flags:      uint32(om.Flags),
+		Value:      om.Value,
 	}, nil
 }
 
