@@ -5798,6 +5798,16 @@ func (l *LsSrv6SIDNLRI) Serialize() ([]byte, error) {
 }
 
 func (l *LsSrv6SIDNLRI) MarshalJSON() ([]byte, error) {
+	var sc LsTLVServiceChaining
+	if l.ServiceChaining != nil {
+		sc = *l.ServiceChaining.(*LsTLVServiceChaining)
+	}
+
+	var om LsTLVOpaqueMetadata
+	if l.OpaqueMetadata != nil {
+		om = *l.OpaqueMetadata.(*LsTLVOpaqueMetadata)
+	}
+
 	return json.Marshal(struct {
 		Type            LsNLRIType           `json:"type"`
 		LocalNode       LsNodeDescriptor     `json:"local_node_desc"`
@@ -5810,8 +5820,8 @@ func (l *LsSrv6SIDNLRI) MarshalJSON() ([]byte, error) {
 		LocalNode:       *l.LocalNodeDesc.(*LsTLVNodeDescriptor).Extract(),
 		Srv6SID:         *l.Srv6SIDInfo.(*LsTLVSrv6SIDInfo),
 		MultiTopoID:     *l.MultiTopoID.(*LsTLVMultiTopoID),
-		ServiceChaining: *l.ServiceChaining.(*LsTLVServiceChaining),
-		OpaqueMetadata:  *l.OpaqueMetadata.(*LsTLVOpaqueMetadata),
+		ServiceChaining: sc,
+		OpaqueMetadata:  om,
 	})
 }
 

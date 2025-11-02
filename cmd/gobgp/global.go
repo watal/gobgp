@@ -2249,7 +2249,7 @@ func parseLsLinkNLRIType(args []string) (bgp.NLRI, *bgp.PathAttributeLs, error) 
 
 func parseLsSRv6SIDNLRIType(args []string) (bgp.NLRI, *bgp.PathAttributeLs, error) {
 	// Format:
-	// gobgp global rib add -a ls srv6sid bgp identifier <identifier> local-asn <local-asn> local-bgp-ls-id <local-bgp-ls-id> local-bgp-router-id <local-bgp-router-id> [local-bgp-confederation-member <confederation-member>] sids <sids>... [multi-topology-id <multi-topology-id>...] [service-type <service-type> traffic-type <traffic-type>] [opaque-type <opaque-type> value <value>
+	// gobgp global rib add -a ls srv6sid protocol 7 identifier <identifier> local-asn <local-asn> local-bgp-ls-id <local-bgp-ls-id> local-bgp-router-id <local-bgp-router-id> [local-bgp-confederation-member <confederation-member>] sids <sids>... [multi-topology-id <multi-topology-id>...] [service-type <service-type> traffic-type <traffic-type>] [opaque-type <opaque-type> value <value>
 	req := 11
 	if len(args) < req {
 		return nil, nil, fmt.Errorf("%d args required at least, but got %d", req, len(args))
@@ -2406,7 +2406,7 @@ func parseLsSRv6SIDNLRIType(args []string) (bgp.NLRI, *bgp.PathAttributeLs, erro
 		om = &bgp.LsTLVOpaqueMetadata{
 			LsTLV: bgp.LsTLV{
 				Type:   bgp.LS_TLV_OPAQUE_METADATA,
-				Length: 0,
+				Length: uint16(3 + len(m["value"][0])),
 			},
 			OpaqueType: uint16(opaqueType),
 			Flags:      0, // MUST be 0

@@ -829,7 +829,7 @@ func MarshalLsSRv6SIDNLRI(n *bgp.LsSrv6SIDNLRI) (*api.LsAddrPrefix_LsNLRI, error
 
 	var sc *api.LsServiceChaining
 	if n.ServiceChaining != nil {
-		serviceChainingTLV := n.ServiceChaining.(*bgp.LsTLVServiceChaining)
+		serviceChainingTLV, ok := n.ServiceChaining.(*bgp.LsTLVServiceChaining)
 		if !ok {
 			return nil, fmt.Errorf("invalid ServiceChaining type")
 		}
@@ -841,7 +841,7 @@ func MarshalLsSRv6SIDNLRI(n *bgp.LsSrv6SIDNLRI) (*api.LsAddrPrefix_LsNLRI, error
 
 	var om *api.LsOpaqueMetadata
 	if n.OpaqueMetadata != nil {
-		opaqueMetadataTLV := n.OpaqueMetadata.(*bgp.LsTLVOpaqueMetadata)
+		opaqueMetadataTLV, ok := n.OpaqueMetadata.(*bgp.LsTLVOpaqueMetadata)
 		if !ok {
 			return nil, fmt.Errorf("invalid OpaqueMetadata type")
 		}
