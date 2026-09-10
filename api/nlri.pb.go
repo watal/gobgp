@@ -2103,12 +2103,13 @@ type LsLinkDescriptor struct {
 	// The Link Local/Remote Identifiers TLV carries both identifiers together, and
 	// RFC 5307, Section 1.1 defines 0 as "unknown" for the remote one, so absence
 	// must be distinguishable from zero.
-	LinkLocalId       *uint32 `protobuf:"varint,1,opt,name=link_local_id,json=linkLocalId,proto3,oneof" json:"link_local_id,omitempty"`
-	LinkRemoteId      *uint32 `protobuf:"varint,2,opt,name=link_remote_id,json=linkRemoteId,proto3,oneof" json:"link_remote_id,omitempty"`
-	InterfaceAddrIpv4 string  `protobuf:"bytes,3,opt,name=interface_addr_ipv4,json=interfaceAddrIpv4,proto3" json:"interface_addr_ipv4,omitempty"`
-	NeighborAddrIpv4  string  `protobuf:"bytes,4,opt,name=neighbor_addr_ipv4,json=neighborAddrIpv4,proto3" json:"neighbor_addr_ipv4,omitempty"`
-	InterfaceAddrIpv6 string  `protobuf:"bytes,5,opt,name=interface_addr_ipv6,json=interfaceAddrIpv6,proto3" json:"interface_addr_ipv6,omitempty"`
-	NeighborAddrIpv6  string  `protobuf:"bytes,6,opt,name=neighbor_addr_ipv6,json=neighborAddrIpv6,proto3" json:"neighbor_addr_ipv6,omitempty"`
+	LinkLocalId       *uint32                    `protobuf:"varint,1,opt,name=link_local_id,json=linkLocalId,proto3,oneof" json:"link_local_id,omitempty"`
+	LinkRemoteId      *uint32                    `protobuf:"varint,2,opt,name=link_remote_id,json=linkRemoteId,proto3,oneof" json:"link_remote_id,omitempty"`
+	InterfaceAddrIpv4 string                     `protobuf:"bytes,3,opt,name=interface_addr_ipv4,json=interfaceAddrIpv4,proto3" json:"interface_addr_ipv4,omitempty"`
+	NeighborAddrIpv4  string                     `protobuf:"bytes,4,opt,name=neighbor_addr_ipv4,json=neighborAddrIpv4,proto3" json:"neighbor_addr_ipv4,omitempty"`
+	InterfaceAddrIpv6 string                     `protobuf:"bytes,5,opt,name=interface_addr_ipv6,json=interfaceAddrIpv6,proto3" json:"interface_addr_ipv6,omitempty"`
+	NeighborAddrIpv6  string                     `protobuf:"bytes,6,opt,name=neighbor_addr_ipv6,json=neighborAddrIpv6,proto3" json:"neighbor_addr_ipv6,omitempty"`
+	MultiTopoId       *LsMultiTopologyIdentifier `protobuf:"bytes,7,opt,name=multi_topo_id,json=multiTopoId,proto3" json:"multi_topo_id,omitempty"`
 	unknownFields     protoimpl.UnknownFields
 	sizeCache         protoimpl.SizeCache
 }
@@ -2183,6 +2184,13 @@ func (x *LsLinkDescriptor) GetNeighborAddrIpv6() string {
 		return x.NeighborAddrIpv6
 	}
 	return ""
+}
+
+func (x *LsLinkDescriptor) GetMultiTopoId() *LsMultiTopologyIdentifier {
+	if x != nil {
+		return x.MultiTopoId
+	}
+	return nil
 }
 
 type LsPrefixDescriptor struct {
@@ -3547,14 +3555,15 @@ const file_api_nlri_proto_rawDesc = "" +
 	"pseudonode\x12\"\n" +
 	"\rigp_router_id\x18\x05 \x01(\tR\vigpRouterId\x12\"\n" +
 	"\rbgp_router_id\x18\x06 \x01(\tR\vbgpRouterId\x128\n" +
-	"\x18bgp_confederation_member\x18\a \x01(\rR\x16bgpConfederationMember\"\xc7\x02\n" +
+	"\x18bgp_confederation_member\x18\a \x01(\rR\x16bgpConfederationMember\"\x8b\x03\n" +
 	"\x10LsLinkDescriptor\x12'\n" +
 	"\rlink_local_id\x18\x01 \x01(\rH\x00R\vlinkLocalId\x88\x01\x01\x12)\n" +
 	"\x0elink_remote_id\x18\x02 \x01(\rH\x01R\flinkRemoteId\x88\x01\x01\x12.\n" +
 	"\x13interface_addr_ipv4\x18\x03 \x01(\tR\x11interfaceAddrIpv4\x12,\n" +
 	"\x12neighbor_addr_ipv4\x18\x04 \x01(\tR\x10neighborAddrIpv4\x12.\n" +
 	"\x13interface_addr_ipv6\x18\x05 \x01(\tR\x11interfaceAddrIpv6\x12,\n" +
-	"\x12neighbor_addr_ipv6\x18\x06 \x01(\tR\x10neighborAddrIpv6B\x10\n" +
+	"\x12neighbor_addr_ipv6\x18\x06 \x01(\tR\x10neighborAddrIpv6\x12B\n" +
+	"\rmulti_topo_id\x18\a \x01(\v2\x1e.api.LsMultiTopologyIdentifierR\vmultiTopoIdB\x10\n" +
 	"\x0e_link_local_idB\x11\n" +
 	"\x0f_link_remote_id\"{\n" +
 	"\x12LsPrefixDescriptor\x12'\n" +
@@ -3777,41 +3786,42 @@ var file_api_nlri_proto_depIdxs = []int32{
 	22, // 39: api.FlowSpecNLRI.rules:type_name -> api.FlowSpecRule
 	47, // 40: api.VPNFlowSpecNLRI.rd:type_name -> api.RouteDistinguisher
 	22, // 41: api.VPNFlowSpecNLRI.rules:type_name -> api.FlowSpecRule
-	2,  // 42: api.LsPrefixDescriptor.ospf_route_type:type_name -> api.LsOspfRouteType
-	26, // 43: api.LsNodeNLRI.local_node:type_name -> api.LsNodeDescriptor
-	26, // 44: api.LsLinkNLRI.local_node:type_name -> api.LsNodeDescriptor
-	26, // 45: api.LsLinkNLRI.remote_node:type_name -> api.LsNodeDescriptor
-	27, // 46: api.LsLinkNLRI.link_descriptor:type_name -> api.LsLinkDescriptor
-	26, // 47: api.LsPrefixV4NLRI.local_node:type_name -> api.LsNodeDescriptor
-	28, // 48: api.LsPrefixV4NLRI.prefix_descriptor:type_name -> api.LsPrefixDescriptor
-	26, // 49: api.LsPrefixV6NLRI.local_node:type_name -> api.LsNodeDescriptor
-	28, // 50: api.LsPrefixV6NLRI.prefix_descriptor:type_name -> api.LsPrefixDescriptor
-	26, // 51: api.LsSrv6SIDNLRI.local_node:type_name -> api.LsNodeDescriptor
-	33, // 52: api.LsSrv6SIDNLRI.srv6_sid_information:type_name -> api.LsSrv6SIDInformation
-	34, // 53: api.LsSrv6SIDNLRI.multi_topo_id:type_name -> api.LsMultiTopologyIdentifier
-	0,  // 54: api.LsAddrPrefix.type:type_name -> api.LsNLRIType
-	46, // 55: api.LsAddrPrefix.nlri:type_name -> api.LsAddrPrefix.LsNLRI
-	1,  // 56: api.LsAddrPrefix.protocol_id:type_name -> api.LsProtocolID
-	47, // 57: api.MUPInterworkSegmentDiscoveryRoute.rd:type_name -> api.RouteDistinguisher
-	47, // 58: api.MUPDirectSegmentDiscoveryRoute.rd:type_name -> api.RouteDistinguisher
-	39, // 59: api.MUPTLV.session_parameters:type_name -> api.MUPSessionParametersTLV
-	40, // 60: api.MUPTLV.interwork_endpoint:type_name -> api.MUPInterworkEndpointTLV
-	41, // 61: api.MUPTLV.source_address:type_name -> api.MUPSourceAddressTLV
-	42, // 62: api.MUPTLV.unknown:type_name -> api.MUPUnknownTLV
-	47, // 63: api.MUPType1SessionTransformedRoute.rd:type_name -> api.RouteDistinguisher
-	43, // 64: api.MUPType1SessionTransformedRoute.tlvs:type_name -> api.MUPTLV
-	47, // 65: api.MUPType2SessionTransformedRoute.rd:type_name -> api.RouteDistinguisher
-	43, // 66: api.MUPType2SessionTransformedRoute.tlvs:type_name -> api.MUPTLV
-	29, // 67: api.LsAddrPrefix.LsNLRI.node:type_name -> api.LsNodeNLRI
-	30, // 68: api.LsAddrPrefix.LsNLRI.link:type_name -> api.LsLinkNLRI
-	31, // 69: api.LsAddrPrefix.LsNLRI.prefix_v4:type_name -> api.LsPrefixV4NLRI
-	32, // 70: api.LsAddrPrefix.LsNLRI.prefix_v6:type_name -> api.LsPrefixV6NLRI
-	35, // 71: api.LsAddrPrefix.LsNLRI.srv6_sid:type_name -> api.LsSrv6SIDNLRI
-	72, // [72:72] is the sub-list for method output_type
-	72, // [72:72] is the sub-list for method input_type
-	72, // [72:72] is the sub-list for extension type_name
-	72, // [72:72] is the sub-list for extension extendee
-	0,  // [0:72] is the sub-list for field type_name
+	34, // 42: api.LsLinkDescriptor.multi_topo_id:type_name -> api.LsMultiTopologyIdentifier
+	2,  // 43: api.LsPrefixDescriptor.ospf_route_type:type_name -> api.LsOspfRouteType
+	26, // 44: api.LsNodeNLRI.local_node:type_name -> api.LsNodeDescriptor
+	26, // 45: api.LsLinkNLRI.local_node:type_name -> api.LsNodeDescriptor
+	26, // 46: api.LsLinkNLRI.remote_node:type_name -> api.LsNodeDescriptor
+	27, // 47: api.LsLinkNLRI.link_descriptor:type_name -> api.LsLinkDescriptor
+	26, // 48: api.LsPrefixV4NLRI.local_node:type_name -> api.LsNodeDescriptor
+	28, // 49: api.LsPrefixV4NLRI.prefix_descriptor:type_name -> api.LsPrefixDescriptor
+	26, // 50: api.LsPrefixV6NLRI.local_node:type_name -> api.LsNodeDescriptor
+	28, // 51: api.LsPrefixV6NLRI.prefix_descriptor:type_name -> api.LsPrefixDescriptor
+	26, // 52: api.LsSrv6SIDNLRI.local_node:type_name -> api.LsNodeDescriptor
+	33, // 53: api.LsSrv6SIDNLRI.srv6_sid_information:type_name -> api.LsSrv6SIDInformation
+	34, // 54: api.LsSrv6SIDNLRI.multi_topo_id:type_name -> api.LsMultiTopologyIdentifier
+	0,  // 55: api.LsAddrPrefix.type:type_name -> api.LsNLRIType
+	46, // 56: api.LsAddrPrefix.nlri:type_name -> api.LsAddrPrefix.LsNLRI
+	1,  // 57: api.LsAddrPrefix.protocol_id:type_name -> api.LsProtocolID
+	47, // 58: api.MUPInterworkSegmentDiscoveryRoute.rd:type_name -> api.RouteDistinguisher
+	47, // 59: api.MUPDirectSegmentDiscoveryRoute.rd:type_name -> api.RouteDistinguisher
+	39, // 60: api.MUPTLV.session_parameters:type_name -> api.MUPSessionParametersTLV
+	40, // 61: api.MUPTLV.interwork_endpoint:type_name -> api.MUPInterworkEndpointTLV
+	41, // 62: api.MUPTLV.source_address:type_name -> api.MUPSourceAddressTLV
+	42, // 63: api.MUPTLV.unknown:type_name -> api.MUPUnknownTLV
+	47, // 64: api.MUPType1SessionTransformedRoute.rd:type_name -> api.RouteDistinguisher
+	43, // 65: api.MUPType1SessionTransformedRoute.tlvs:type_name -> api.MUPTLV
+	47, // 66: api.MUPType2SessionTransformedRoute.rd:type_name -> api.RouteDistinguisher
+	43, // 67: api.MUPType2SessionTransformedRoute.tlvs:type_name -> api.MUPTLV
+	29, // 68: api.LsAddrPrefix.LsNLRI.node:type_name -> api.LsNodeNLRI
+	30, // 69: api.LsAddrPrefix.LsNLRI.link:type_name -> api.LsLinkNLRI
+	31, // 70: api.LsAddrPrefix.LsNLRI.prefix_v4:type_name -> api.LsPrefixV4NLRI
+	32, // 71: api.LsAddrPrefix.LsNLRI.prefix_v6:type_name -> api.LsPrefixV6NLRI
+	35, // 72: api.LsAddrPrefix.LsNLRI.srv6_sid:type_name -> api.LsSrv6SIDNLRI
+	73, // [73:73] is the sub-list for method output_type
+	73, // [73:73] is the sub-list for method input_type
+	73, // [73:73] is the sub-list for extension type_name
+	73, // [73:73] is the sub-list for extension extendee
+	0,  // [0:73] is the sub-list for field type_name
 }
 
 func init() { file_api_nlri_proto_init() }

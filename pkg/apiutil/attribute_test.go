@@ -2379,6 +2379,60 @@ func Test_MarshalLsLinkDescriptorLinkIDPresence(t *testing.T) {
 	assert.NotNil(t, present.LinkRemoteId)
 }
 
+func Test_MarshalLsLinkDescriptorMultiTopoID(t *testing.T) {
+	absent, err := MarshalLsLinkDescriptor(&bgp.LsLinkDescriptor{})
+	require.NoError(t, err)
+	assert.Nil(t, absent.MultiTopoId)
+
+	present, err := MarshalLsLinkDescriptor(&bgp.LsLinkDescriptor{
+		MultiTopoIDs: map[uint16]struct{}{3: {}, 1: {}, 2: {}},
+	})
+	require.NoError(t, err)
+	require.NotNil(t, present.MultiTopoId)
+	assert.Equal(t, []uint32{1, 2, 3}, present.MultiTopoId.GetMultiTopoIds())
+
+	boundary, err := MarshalLsLinkDescriptor(&bgp.LsLinkDescriptor{
+		MultiTopoIDs: map[uint16]struct{}{0: {}, 65535: {}},
+	})
+	require.NoError(t, err)
+	require.NotNil(t, boundary.MultiTopoId)
+	assert.Equal(t, []uint32{0, 65535}, boundary.MultiTopoId.GetMultiTopoIds())
+}
+
+func Test_UnmarshalLsLinkDescriptorMultiTopoID(t *testing.T) {
+	absent, err := UnmarshalLsLinkDescriptor(&api.LsLinkDescriptor{})
+	require.NoError(t, err)
+	assert.Nil(t, absent.MultiTopoIDs)
+
+	empty, err := UnmarshalLsLinkDescriptor(&api.LsLinkDescriptor{MultiTopoId: &api.LsMultiTopologyIdentifier{}})
+	require.NoError(t, err)
+	assert.Nil(t, empty.MultiTopoIDs)
+
+	present, err := UnmarshalLsLinkDescriptor(&api.LsLinkDescriptor{
+		MultiTopoId: &api.LsMultiTopologyIdentifier{MultiTopoIds: []uint32{1, 2, 3}},
+	})
+	require.NoError(t, err)
+	assert.Equal(t, map[uint16]struct{}{1: {}, 2: {}, 3: {}}, present.MultiTopoIDs)
+
+	// Values outside the 16-bit range are truncated to uint16.
+	outOfRange, err := UnmarshalLsLinkDescriptor(&api.LsLinkDescriptor{
+		MultiTopoId: &api.LsMultiTopologyIdentifier{MultiTopoIds: []uint32{65536}},
+	})
+	require.NoError(t, err)
+	assert.Equal(t, map[uint16]struct{}{0: {}}, outOfRange.MultiTopoIDs)
+}
+
+func Test_LsLinkDescriptorMultiTopoIDRoundTrip(t *testing.T) {
+	native := &bgp.LsLinkDescriptor{MultiTopoIDs: map[uint16]struct{}{1: {}, 2: {}, 3: {}}}
+
+	marshalled, err := MarshalLsLinkDescriptor(native)
+	require.NoError(t, err)
+
+	back, err := UnmarshalLsLinkDescriptor(marshalled)
+	require.NoError(t, err)
+	assert.Equal(t, native.MultiTopoIDs, back.MultiTopoIDs)
+}
+
 // A malformed address or prefix must be reported, not silently dropped or kept
 // as the zero value: every one of these fields takes part in the NLRI key, and
 // an invalid ip_reachability used to reach NewLsPrefixTLVs, which cannot build a

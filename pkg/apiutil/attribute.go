@@ -21,6 +21,7 @@ import (
 	"fmt"
 	"net"
 	"net/netip"
+	"sort"
 
 	"github.com/osrg/gobgp/v4/api"
 	"github.com/osrg/gobgp/v4/pkg/packet/bgp"
@@ -704,6 +705,7 @@ func MarshalLsLinkDescriptor(n *bgp.LsLinkDescriptor) (*api.LsLinkDescriptor, er
 		NeighborAddrIpv4:  ipOrDefault(n.NeighborAddrIPv4),
 		InterfaceAddrIpv6: ipOrDefault(n.InterfaceAddrIPv6),
 		NeighborAddrIpv6:  ipOrDefault(n.NeighborAddrIPv6),
+		MultiTopoId:       marshalLsLinkMultiTopoIDs(n.MultiTopoIDs),
 	}, nil
 }
 
@@ -950,7 +952,30 @@ func UnmarshalLsLinkDescriptor(ld *api.LsLinkDescriptor) (*bgp.LsLinkDescriptor,
 		return nil, err
 	}
 
+	if multiTopoIDs := ld.GetMultiTopoId().GetMultiTopoIds(); len(multiTopoIDs) != 0 {
+		desc.MultiTopoIDs = make(map[uint16]struct{}, len(multiTopoIDs))
+		for _, id := range multiTopoIDs {
+			desc.MultiTopoIDs[uint16(id)] = struct{}{}
+		}
+	}
+
 	return desc, nil
+}
+
+func marshalLsLinkMultiTopoIDs(ids map[uint16]struct{}) *api.LsMultiTopologyIdentifier {
+	if len(ids) == 0 {
+		return nil
+	}
+
+	multiTopoIDs := make([]uint32, 0, len(ids))
+	for id := range ids {
+		multiTopoIDs = append(multiTopoIDs, uint32(id))
+	}
+
+	// Sort for deterministic output.
+	sort.Slice(multiTopoIDs, func(i, j int) bool { return multiTopoIDs[i] < multiTopoIDs[j] })
+
+	return &api.LsMultiTopologyIdentifier{MultiTopoIds: multiTopoIDs}
 }
 
 // parseLsLinkAddr parses one optional link descriptor address. An empty string
